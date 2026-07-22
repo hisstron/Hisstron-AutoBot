@@ -1,0 +1,29 @@
+name: Hisstron Daily Auto Bot
+
+on:
+  schedule:
+    # Daily UTC time par chalega (Pakistan time ke hisab se subah 9:00 AM)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Is se hum button click karke test run bhi kar sakte hain
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Hisstron Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python main.py
